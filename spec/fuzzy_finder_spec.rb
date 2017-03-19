@@ -51,6 +51,12 @@ RSpec.describe FuzzyFinder do
   end
 
   describe '#find' do
+    context 'the whole data set' do
+      let!(:csv_data) { "spec/fixtures/full_throttle.csv" }
+      
+      it 'is quick' do
+      end
+    end
     context 'exact match' do
       let(:result) { "8524,Green distressed hibiscus print tankini top,Mantaray\n" }
 

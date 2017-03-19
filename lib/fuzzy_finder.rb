@@ -11,20 +11,31 @@ class FuzzyFinder
   end
 
   def find(search_terms)
-    results = possible_matches(search_terms.split(' '))
-    output.puts formatted_results(results)
+    results = all_matches(search_terms.split(' '))
+    output.puts formatted_results(results) + "\n\n"
   end
 
   def mass_search(file_path)
     CSV.foreach(file_path) do |search_term|
-      find(search_term)
+      find(search_term.join)
     end
   end
 
   private
 
-  def formatted_results(results)
-    results.map { |x| x.join(",") }.join("\n")
+  def all_matches(search_terms)
+    data.each_with_object([]) do |row, results|
+      search_field = row.flatten.join(' ').split(' ')
+      results << row if all_terms_match?(search_terms, search_field)
+      return results if results.length == 10
+    end
+  end
+
+  def all_terms_match?(terms, search_field)
+    terms.map do |term|
+      # if there's no match on any single search term, dont continue with the rest
+      break unless term_match?(term, search_field).any?
+    end
   end
 
   def term_match?(term, search_field)
@@ -34,19 +45,8 @@ class FuzzyFinder
     end
   end
 
-  def all_terms_match?(terms, search_field)
-    terms.map do |term|
-      # if theres no match on any single search term, dont continue with the rest
-      break unless term_match?(term, search_field).any?
-    end
-  end
-
-  def possible_matches(search_terms)
-    data.each_with_object([]) do |row, results|
-      search_field = row.flatten.join(' ').split(' ')
-      results << row if all_terms_match?(search_terms, search_field)
-      return results if results.length == 10
-    end
+  def formatted_results(results)
+    results.map { |x| x.join(",") }.join("\n")
   end
 end
 

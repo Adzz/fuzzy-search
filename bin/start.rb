@@ -8,3 +8,4 @@ puts "tell us what you want:"
 search_terms = gets
 
 FuzzyFinder.new("lib/data.csv").find(search_terms.to_s)
+
