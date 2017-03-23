@@ -34,13 +34,13 @@ RSpec.describe FuzzyFinder do
       end
 
       it 'prints to output the brand' do
-        expect(output.string.split(',')[2]).to eq "Mantaray\n"
+        expect(output.string.split(',')[2]).to eq "Mantaray\n\n"
       end
     end
 
     context 'multiple matches' do
       let(:result) do
-        "14824,Mesquite lace-ups,H by Hudson\n46266,Bonded lace bustier,Untold\n"
+        "14824,Mesquite lace-ups,H by Hudson\n46266,Bonded lace bustier,Untold\n\n"
       end
 
       it 'seperates each match with a new line' do
@@ -53,12 +53,12 @@ RSpec.describe FuzzyFinder do
   describe '#find' do
     context 'the whole data set' do
       let!(:csv_data) { "spec/fixtures/full_throttle.csv" }
-      
+
       it 'is quick' do
       end
     end
     context 'exact match' do
-      let(:result) { "8524,Green distressed hibiscus print tankini top,Mantaray\n" }
+      let(:result) { "8524,Green distressed hibiscus print tankini top,Mantaray\n\n" }
 
       it 'returns an exact match' do
         subject.find("green top")
@@ -81,7 +81,7 @@ RSpec.describe FuzzyFinder do
 
     it 'will only match if ALL the search terms are present in the search field' do
       subject.find("lace bustier")
-      expect(subject.output.string).to eq "46266,Bonded lace bustier,Untold\n"
+      expect(subject.output.string).to eq "46266,Bonded lace bustier,Untold\n\n"
     end
   end
 end
